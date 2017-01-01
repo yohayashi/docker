@@ -1,0 +1,28 @@
+version: '2'
+services:
+
+  supervisor:
+    build: ./supervisor
+    image: yohayashi/supervisor
+    container_name: supervisor
+    restart: always
+    volumes:
+      - ~/.ssh:/user/.ssh
+      - ~/workspace:/workspace
+      - ./jupyter/conf/jupyter_notebook_config.py:/home/user/.jupyter/jupyter_notebook_config.py:ro
+      - ./supervisor/conf/cloud9.conf:/etc/supervisor/conf.d/cloud9.conf
+      - ./supervisor/conf/jupyter.conf:/etc/supervisor/conf.d/jupyter.conf
+      
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/www:/var/www
+    links:
+      - supervisor:supervisor
