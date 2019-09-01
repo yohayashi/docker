@@ -1,2 +1,2 @@
 # docker
-jupyter notebook and cloud9 IDE work behind nginx proxy.
+jupyter notebook and cloud9 IDE both works behind nginx proxy.
